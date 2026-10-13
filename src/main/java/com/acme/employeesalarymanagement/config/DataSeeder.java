@@ -10,6 +10,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @Component
@@ -37,8 +38,17 @@ public class DataSeeder implements CommandLineRunner {
         String[] firstNames = {"Aarav", "Priya", "John", "Emma", "Siddharth", "Meera", "Liam", "Sophia", "Wei", "Akira", "Carlos", "Fatima"};
         String[] lastNames = {"Sharma", "Verma", "Smith", "Johnson", "Patel", "Nair", "Brown", "Davis", "Zhang", "Tanaka", "Gomez", "Khan"};
         String[] departments = {"Engineering", "Product", "Sales", "Human Resources", "Finance", "Marketing", "Legal"};
-        String[] titles = {"Software Engineer", "Senior Engineer", "Product Manager", "HR Specialist", "Financial Analyst", "Marketing Lead"};
 
+        // Map titles strictly to departments to avoid mismatched roles
+        Map<String, List<String>> departmentTitles = Map.of(
+                "Engineering", List.of("Software Engineer", "Senior Engineer", "DevOps Lead", "QA Engineer"),
+                "Sales", List.of("Sales Executive", "Account Executive", "Sales Manager", "Business Development Manager"),
+                "Product", List.of("Product Manager", "Product Owner", "UI/UX Designer"),
+                "Marketing", List.of("Marketing Lead", "SEO Specialist", "Content Strategist"),
+                "Finance", List.of("Financial Analyst", "Accountant", "Finance Manager"),
+                "Human Resources", List.of("HR Specialist", "Talent Acquisition Lead", "HR Manager"),
+                "Legal", List.of("Legal Counsel", "Compliance Officer")
+        );
         // Country and corresponding local currency
         String[][] countryCurrency = {
                 {"India", "INR"},
@@ -60,8 +70,13 @@ public class DataSeeder implements CommandLineRunner {
             String fn = firstNames[random.nextInt(firstNames.length)];
             String ln = lastNames[random.nextInt(lastNames.length)];
             String email = fn.toLowerCase() + "." + ln.toLowerCase() + i + "@acme.com";
+
+            // Pick department first
             String dept = departments[random.nextInt(departments.length)];
-            String title = titles[random.nextInt(titles.length)];
+
+            // Pick job title matching selected department
+            List<String> titlesForDept = departmentTitles.get(dept);
+            String title = titlesForDept.get(random.nextInt(titlesForDept.size()));
 
             String[] location = countryCurrency[random.nextInt(countryCurrency.length)];
             String country = location[0];
@@ -77,7 +92,11 @@ public class DataSeeder implements CommandLineRunner {
             };
 
             BigDecimal baseSalary = BigDecimal.valueOf(baseAmount).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal bonus = BigDecimal.valueOf(baseAmount * (0.05 + random.nextDouble() * 0.15)).setScale(2, RoundingMode.HALF_UP);
+
+            // Corrected bonus calculation: baseAmount * (0.05 to 0.20)
+            BigDecimal bonus = BigDecimal.valueOf(baseAmount * (0.05 + random.nextDouble() * 0.15))
+                    .setScale(2, RoundingMode.HALF_UP);
+
             LocalDate joiningDate = LocalDate.now().minusDays(random.nextInt(3650)); // Within last 10 years
 
             batchParams.add(new Object[]{empCode, fn, ln, email, dept, title, country, currency, baseSalary, bonus, joiningDate});
@@ -89,6 +108,8 @@ public class DataSeeder implements CommandLineRunner {
         }
 
         long endTime = System.currentTimeMillis();
+
+        // Corrected print statement calculation
         System.out.println("Successfully seeded 10,000 employee records in " + (endTime - startTime) + " ms!");
     }
 }

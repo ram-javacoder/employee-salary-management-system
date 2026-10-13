@@ -173,8 +173,8 @@ export default function App() {
                           <p className="text-xs text-slate-400">{emp.email}</p>
                         </td>
                         <td className="p-4">
-                          <p className="text-slate-800">{emp.jobTitle}</p>
-                          <p className="text-xs text-slate-400">{emp.department}</p>
+                          <p className="font-semibold text-slate-800">{emp.department}</p>
+                          <p className="text-xs text-slate-400">{emp.jobTitle}</p>
                         </td>
                         <td className="p-4">
                       <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs font-medium">
