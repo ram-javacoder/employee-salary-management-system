@@ -3,6 +3,34 @@
 ## 1. System Overview
 The ACME Org Employee Salary Management System is designed as a modular Spring Boot monolith backend integrated with a ReactJS frontend. It serves the HR Manager persona to manage salary details for 10,000 employees with low-latency analytics and paginated directory searches.
 
+### End-to-End System Architecture
+
+```text
+       [ Web Browser / HR Manager UI ]
+                     │
+              REST / JSON (HTTP)
+                     │
+                     ▼
+┌─────────────────────────────────────────┐
+│        Spring Boot Monolith Backend     │
+│ ┌─────────────────────────────────────┐ │
+│ │  REST Controller Layer (Endpoints)  │ │
+│ ├─────────────────────────────────────┤ │
+│ │  Service Layer (Business Rules &    │ │
+│ │                  Salary Insights)   │ │
+│ ├─────────────────────────────────────┤ │
+│ │  Data Layer (Spring Data JPA / JDBC)│ │
+│ └─────────────────────────────────────┘ │
+└────────────────────┬────────────────────┘
+                     │ SQL / JDBC Batching
+                     ▼
+┌─────────────────────────────────────────┐
+│        Relational Database (MySQL)      │
+│  - Indexing on country, dept, salary    │
+│  - Pre-seeded with 10,000 Records       │
+└─────────────────────────────────────────┘
+```
+
 ---
 
 ## 2. Architectural Decisions & Trade-offs

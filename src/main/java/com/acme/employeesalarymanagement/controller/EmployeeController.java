@@ -1,5 +1,6 @@
 package com.acme.employeesalarymanagement.controller;
 
+import com.acme.employeesalarymanagement.dto.EmployeeCreateDto;
 import com.acme.employeesalarymanagement.dto.EmployeeResponseDto;
 import com.acme.employeesalarymanagement.dto.SalaryAnalyticsSummaryDto;
 import com.acme.employeesalarymanagement.service.EmployeeService;
@@ -34,5 +35,11 @@ public class EmployeeController {
     @GetMapping("/analytics/summary")
     public ResponseEntity<SalaryAnalyticsSummaryDto> getAnalyticsSummary() {
         return ResponseEntity.ok(employeeService.getAnalyticsSummary());
+    }
+
+    @PostMapping
+    public ResponseEntity<EmployeeResponseDto> createEmployee(@RequestBody EmployeeCreateDto dto) {
+        EmployeeResponseDto created = employeeService.createEmployee(dto);
+        return ResponseEntity.status(org.springframework.http.HttpStatus.CREATED).body(created);
     }
 }

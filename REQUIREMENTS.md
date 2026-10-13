@@ -19,7 +19,7 @@ The software enables the HR Manager to manage salary data for **10,000 employees
     * **Regional & Departmental Breakdown**: Instant analysis of pay across countries and departments to answer "how the org pays people".
     * **Currency Handling**: Normalized display of salaries for comparison.
 
-2. **Employee Directory & Salary Management**
+2. **Employe[REQUIREMENTS.md](REQUIREMENTS.md)e Directory & Salary Management**
     * **High-Performance Data Grid**: Server-side paginated list handling 10,000 records smoothly without browser lag.
     * **Search & Multi-Filter**: Filter employees by country, department, job title, and salary range.
     * **CRUD Operations**: Ability to view, add, update, and delete individual employee salary details.
@@ -38,6 +38,9 @@ The software enables the HR Manager to manage salary data for **10,000 employees
 | **Real-time Live Forex API** | Out of Scope | Multi-currency conversions use static exchange rate tables in the database. Live FX APIs introduce non-deterministic external dependencies and network latency. |
 | **Complex Tax & Benefit Engine** | Out of Scope | The system targets compensation management (Base Salary, Bonus, Allowances) rather than regional payroll tax processing (PF, TDS, 401k), keeping business logic clean and deterministic. |
 | **Microservices Architecture** | Out of Scope | A clean, modular Spring Boot monolith with proper indexing easily handles 10,000 records with sub-100ms response times, minimizing infrastructure overhead on limited dev setups. |
+| **Complex Authentication / Security Layer** | Out of Scope | The system is designed as an internal administrative portal for the HR Manager persona. Skipping multi-role Spring Security simplifies API integration and focuses on data performance for 10,000 records.|
+
+
 
 ---
 

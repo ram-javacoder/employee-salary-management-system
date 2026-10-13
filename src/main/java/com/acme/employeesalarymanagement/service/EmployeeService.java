@@ -1,5 +1,6 @@
 package com.acme.employeesalarymanagement.service;
 
+import com.acme.employeesalarymanagement.dto.EmployeeCreateDto;
 import com.acme.employeesalarymanagement.dto.EmployeeResponseDto;
 import com.acme.employeesalarymanagement.dto.SalaryAnalyticsSummaryDto;
 import com.acme.employeesalarymanagement.entity.Employee;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -87,6 +89,30 @@ public class EmployeeService {
                 .collect(Collectors.groupingBy(Employee::getDepartment, Collectors.counting()));
 
         return new SalaryAnalyticsSummaryDto(totalCount, totalPayroll, avgSalary, maxSalary, minSalary, countryDistribution, deptDistribution);
+    }
+
+    @Transactional
+    public EmployeeResponseDto createEmployee(EmployeeCreateDto dto) {
+        if (employeeRepository.existsByEmployeeCode(dto.employeeCode())) {
+            throw new IllegalArgumentException("Employee code already exists: " + dto.employeeCode());
+        }
+
+        Employee employee = new Employee(
+                dto.employeeCode(),
+                dto.firstName(),
+                dto.lastName(),
+                dto.email(),
+                dto.department(),
+                dto.jobTitle(),
+                dto.country(),
+                dto.currency(),
+                dto.baseSalary(),
+                dto.bonus() != null ? dto.bonus() : BigDecimal.ZERO,
+                dto.joiningDate() != null ? dto.joiningDate() : LocalDate.now()
+        );
+
+        Employee saved = employeeRepository.save(employee);
+        return mapToDto(saved);
     }
 
     private EmployeeResponseDto mapToDto(Employee e) {
