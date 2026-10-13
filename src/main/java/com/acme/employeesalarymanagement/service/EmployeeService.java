@@ -48,8 +48,10 @@ public class EmployeeService {
         }
 
         if (search != null && !search.isBlank()) {
-            String searchTerm = "%" + search.toLowerCase() + "%";
+            String searchTerm = "%" + search.toLowerCase().trim() + "%";
             spec = spec.and((root, query, cb) -> cb.or(
+                    // Concatenate firstName + space + lastName for full name search
+                    cb.like(cb.lower(cb.concat(cb.concat(root.get("firstName"), " "), root.get("lastName"))), searchTerm),
                     cb.like(cb.lower(root.get("firstName")), searchTerm),
                     cb.like(cb.lower(root.get("lastName")), searchTerm),
                     cb.like(cb.lower(root.get("employeeCode")), searchTerm),
